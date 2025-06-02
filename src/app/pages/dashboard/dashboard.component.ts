@@ -1,40 +1,52 @@
-import { JsonPipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit,inject } from '@angular/core';
-import * as CryptoJS from 'crypto-js';
-import { Constant } from '../../conststnt';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
+import { map, startWith, catchError, switchMap } from 'rxjs/operators';
+import { AuthService } from '../../services/auth.service';
+import { UserService, User } from '../../services/user.service';
+
+interface DashboardState {
+  users: User[];
+  loading: boolean;
+  error: string | null;
+}
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [JsonPipe],
+  imports: [AsyncPipe, NgFor, NgIf],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
+  private authService = inject(AuthService);
+  private userService = inject(UserService);
 
-  http= inject(HttpClient);
-  userList: any[]= [];
-  decriptedName: string = '';
+  // Refresh trigger for manual data refresh
+  private refreshTrigger$ = new BehaviorSubject<void>(undefined);
 
-  ngOnInit(): void {
-    this.getAllUser();
-    const uName = localStorage.getItem('uName');
-    if(uName != null) {
-      this.decriptedName = this.decriptData(uName);
-    }
-   
+  // Declarative approach using observables
+  currentUser$ = this.authService.currentUser$;
+  
+  // Combined state management for loading and error handling
+  dashboardState$: Observable<DashboardState> = this.refreshTrigger$.pipe(
+    switchMap(() => 
+      this.userService.getAllUsers().pipe(
+        map(users => ({ users, loading: false, error: null })),
+        startWith({ users: [], loading: true, error: null }),
+        catchError(error => {
+          console.error('Error loading users:', error);
+          return of({ users: [], loading: false, error: 'Failed to load users. Please try again.' });
+        })
+      )
+    )
+  );
+
+  refreshUsers(): void {
+    this.refreshTrigger$.next();
   }
 
-  decriptData(data: string) {
-    const decriptVal = CryptoJS.AES.decrypt(data,Constant.EN_KEY);
-    return decriptVal.toString(CryptoJS.enc.Utf8);
+  trackByUserId(index: number, user: User): number {
+    return user.userId;
   }
-
-  getAllUser() {
-    this.http.get("https://freeapi.miniprojectideas.com/api/User/GetAllUsers").subscribe((Res:any)=>{
-      this.userList  = Res.data;
-    })
-  }
-
 }

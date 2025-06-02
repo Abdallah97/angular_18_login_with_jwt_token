@@ -3,17 +3,30 @@
         <div class="screen">
             <div class="screen__content">
                 <form class="login">
+                    <!-- Error Message -->
+                    <div *ngIf="errorMessage" class="alert alert-danger mb-3" role="alert">
+                        <small>{{ errorMessage }}</small>
+                        <button type="button" class="btn-close btn-close-sm float-end" (click)="clearError()"></button>
+                    </div>
+                    
                     <div class="login__field">
                         <i class="login__icon fas fa-user"></i>
-                        <input type="text" name="EmailId" [(ngModel)]="logiObj.EmailId" class="login__input" placeholder="User name / Email">
+                        <input type="text" name="EmailId" [(ngModel)]="logiObj.EmailId" 
+                               class="login__input" placeholder="User name / Email" 
+                               [disabled]="isLoading" (input)="clearError()">
                     </div>
                     <div class="login__field">
                         <i class="login__icon fas fa-lock"></i>
-                        <input type="password" name="Password" [(ngModel)]="logiObj.Password" class="login__input" placeholder="Password">
+                        <input type="password" name="Password" [(ngModel)]="logiObj.Password" 
+                               class="login__input" placeholder="Password" 
+                               [disabled]="isLoading" (input)="clearError()">
                     </div>
-                    <button class="button login__submit" (click)="onLogin()">
-                        <span class="button__text">Log In Now</span>
-                        <i class="button__icon fas fa-chevron-right"></i>
+                    <button class="button login__submit" (click)="onLogin()" [disabled]="isLoading">
+                        <span class="button__text" *ngIf="!isLoading">Log In Now</span>
+                        <span class="button__text" *ngIf="isLoading">
+                            <i class="fas fa-spinner fa-spin me-2"></i>Logging in...
+                        </span>
+                        <i class="button__icon fas fa-chevron-right" *ngIf="!isLoading"></i>
                     </button>				
                 </form>
                 <div class="social-login">
