@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { API_BASE_URL } from '../conststnt';
+import { API_BASE_URL } from '../constants';
 
 export interface User {
   userId: number;

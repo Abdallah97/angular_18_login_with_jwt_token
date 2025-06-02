@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import * as CryptoJS from 'crypto-js';
-import { Constant, API_BASE_URL } from '../conststnt';
+import { Constant, API_BASE_URL } from '../constants';
 
 export interface LoginRequest {
   EmailId: string;
@@ -19,11 +19,11 @@ export interface LoginResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private http = inject(HttpClient);
-  
+
   private currentUserSubject = new BehaviorSubject<string | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -40,16 +40,17 @@ export class AuthService {
     }
   }
   login(loginRequest: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${API_BASE_URL}/Login`, loginRequest)
+    return this.http
+      .post<LoginResponse>(`${API_BASE_URL}/Login`, loginRequest)
       .pipe(
-        tap(response => {
+        tap((response) => {
           if (response.result) {
             const encryptedUserName = this.encryptData(loginRequest.EmailId);
             localStorage.setItem('uName', encryptedUserName);
             localStorage.setItem('angular18Token', response.data.token);
             this.currentUserSubject.next(loginRequest.EmailId);
           }
-        })
+        }),
       );
   }
 
