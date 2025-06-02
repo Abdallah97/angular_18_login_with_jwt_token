@@ -22,12 +22,8 @@
           </a>
         </div>
       </div>
-
       <!-- User info and logout -->
-      <div
-        class="flex items-center space-x-4"
-        *ngIf="currentUser$ | async as user"
-      >
+      <div class="flex items-center space-x-4" *ngIf="currentUser() as user">
         <span class="text-sm text-white"
           >Welcome, <span class="font-medium">{{ user }}</span></span
         >

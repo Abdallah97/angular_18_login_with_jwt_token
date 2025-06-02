@@ -1,9 +1,10 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
-import { map, startWith, catchError, switchMap } from 'rxjs/operators';
+import { NgFor, NgIf } from '@angular/common';
+import { Component, inject, signal, computed } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../services/auth.service';
 import { UserService, User } from '../../services/user.service';
+import { switchMap, catchError, of, startWith, defer } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 interface DashboardState {
   users: User[];
@@ -14,35 +15,35 @@ interface DashboardState {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [AsyncPipe, NgFor, NgIf],
+  imports: [NgFor, NgIf],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
   private authService = inject(AuthService);
   private userService = inject(UserService);
-
-  // Refresh trigger for manual data refresh
-  private refreshTrigger$ = new BehaviorSubject<void>(undefined);
-
-  // Declarative approach using observables
-  currentUser$ = this.authService.currentUser$;
-  
-  // Combined state management for loading and error handling
-  dashboardState$: Observable<DashboardState> = this.refreshTrigger$.pipe(
-    switchMap(() => 
-      this.userService.getAllUsers().pipe(
-        map(users => ({ users, loading: false, error: null })),
-        startWith({ users: [], loading: true, error: null }),
-        catchError(error => {
-          console.error('Error loading users:', error);
-          return of({ users: [], loading: false, error: 'Failed to load users. Please try again.' });
-        })
-      )
-    )
+  private refreshCounter = signal(0);
+  currentUser = this.authService.currentUser;
+  state = toSignal(
+    computed(() => {
+      this.refreshCounter();
+      return this.userService.getAllUsers();
+    })().pipe(
+      map((users) => ({ users, loading: false, error: null })),
+      startWith({ users: [], loading: true, error: null }),
+      catchError((error) => {
+        console.error('Error loading users:', error);
+        return of({
+          users: [],
+          loading: false,
+          error: 'Failed to load users. Please try again.',
+        });
+      }),
+    ),
+    { initialValue: { users: [], loading: true, error: null } },
   );
 
   refreshUsers(): void {
-    this.refreshTrigger$.next();
+    this.refreshCounter.update((count) => count + 1);
   }
 
   trackByUserId(index: number, user: User): number {

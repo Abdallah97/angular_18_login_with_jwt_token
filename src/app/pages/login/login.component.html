@@ -1,28 +1,60 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 flex items-center justify-center p-4">
-  <div class="max-w-md w-full space-y-8">
-    <div class="bg-white rounded-2xl shadow-2xl p-8 relative overflow-hidden">
+<div
+  class="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 p-4"
+>
+  <div class="w-full max-w-md space-y-8">
+    <div class="relative overflow-hidden rounded-2xl bg-white p-8 shadow-2xl">
       <!-- Background decoration -->
-      <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-blue-400 to-purple-500 rounded-full transform translate-x-16 -translate-y-16 opacity-10"></div>
-      <div class="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-purple-400 to-pink-500 rounded-full transform -translate-x-12 translate-y-12 opacity-10"></div>
-      
+      <div
+        class="absolute right-0 top-0 h-40 w-40 -translate-y-16 translate-x-16 transform rounded-full bg-gradient-to-bl from-blue-400 to-purple-500 opacity-10"
+      ></div>
+      <div
+        class="absolute bottom-0 left-0 h-32 w-32 -translate-x-12 translate-y-12 transform rounded-full bg-gradient-to-tr from-purple-400 to-pink-500 opacity-10"
+      ></div>
+
       <div class="relative z-10">
         <!-- Header -->
-        <div class="text-center mb-8">
-          <h2 class="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
+        <div class="mb-8 text-center">
+          <h2 class="mb-2 text-3xl font-bold text-gray-900">Welcome Back</h2>
           <p class="text-gray-600">Please sign in to your account</p>
         </div>
-
         <!-- Error Message -->
-        <div *ngIf="errorMessage" class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start">
-          <svg class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+        <div
+          *ngIf="errorMessage()"
+          class="mb-6 flex items-start rounded-lg border border-red-200 bg-red-50 p-4"
+        >
+          <svg
+            class="mr-3 mt-0.5 h-5 w-5 flex-shrink-0 text-red-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+            ></path>
           </svg>
           <div class="flex-1">
-            <p class="text-red-700 text-sm">{{ errorMessage }}</p>
+            <p class="text-sm text-red-700">{{ errorMessage() }}</p>
           </div>
-          <button type="button" (click)="clearError()" class="text-red-400 hover:text-red-600 transition-colors duration-200">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          <button
+            type="button"
+            (click)="clearError()"
+            class="text-red-400 transition-colors duration-200 hover:text-red-600"
+          >
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
             </svg>
           </button>
         </div>
@@ -32,19 +64,32 @@
           <div class="relative">
             <label for="email" class="sr-only">Email address</label>
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              <div
+                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+              >
+                <svg
+                  class="h-5 w-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  ></path>
                 </svg>
               </div>
-              <input 
-                type="text" 
-                name="EmailId" 
+              <input
+                type="text"
+                name="EmailId"
                 [(ngModel)]="logiObj.EmailId"
-                [disabled]="isLoading"
+                [disabled]="isLoading()"
                 (input)="clearError()"
-                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-50 disabled:text-gray-500"
-                placeholder="Email address">
+                class="block w-full rounded-lg border border-gray-300 py-3 pl-10 pr-3 text-gray-900 placeholder-gray-500 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                placeholder="Email address"
+              />
             </div>
           </div>
 
@@ -52,47 +97,83 @@
           <div class="relative">
             <label for="password" class="sr-only">Password</label>
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              <div
+                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+              >
+                <svg
+                  class="h-5 w-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  ></path>
                 </svg>
               </div>
-              <input 
-                type="password" 
-                name="Password" 
+              <input
+                type="password"
+                name="Password"
                 [(ngModel)]="logiObj.Password"
-                [disabled]="isLoading"
+                [disabled]="isLoading()"
                 (input)="clearError()"
-                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-50 disabled:text-gray-500"
-                placeholder="Password">
+                class="block w-full rounded-lg border border-gray-300 py-3 pl-10 pr-3 text-gray-900 placeholder-gray-500 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+                placeholder="Password"
+              />
             </div>
           </div>
 
           <!-- Login Button -->
-          <button 
+          <button
             type="button"
-            (click)="onLogin()" 
-            [disabled]="isLoading"
-            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]">
-            <span *ngIf="!isLoading" class="flex items-center">
+            (click)="onLogin()"
+            [disabled]="isLoading()"
+            class="group relative flex w-full transform justify-center rounded-lg border border-transparent bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3 text-sm font-medium text-white transition-all duration-200 hover:scale-[1.02] hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <span *ngIf="!isLoading()" class="flex items-center">
               Log in
-              <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              <svg
+                class="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                ></path>
               </svg>
             </span>
-            <span *ngIf="isLoading" class="flex items-center">
-              <svg class="animate-spin -ml-1 mr-3 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <span *ngIf="isLoading()" class="flex items-center">
+              <svg
+                class="-ml-1 mr-3 h-4 w-4 animate-spin text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
               Signing in...
             </span>
           </button>
         </form>
-
-       
       </div>
     </div>
   </div>
 </div>
-
