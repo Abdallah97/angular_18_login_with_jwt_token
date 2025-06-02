@@ -9,7 +9,7 @@ import { AuthService, LoginRequest } from '../../services/auth.service';
   standalone: true,
   imports: [FormsModule, NgIf],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  
 })
 export class LoginComponent {
   logiObj: LoginRequest = {

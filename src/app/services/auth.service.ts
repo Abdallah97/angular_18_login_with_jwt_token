@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import * as CryptoJS from 'crypto-js';
-import { Constant } from '../conststnt';
+import { Constant, API_BASE_URL } from '../conststnt';
 
 export interface LoginRequest {
   EmailId: string;
@@ -23,7 +23,6 @@ export interface LoginResponse {
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private readonly API_BASE_URL = 'https://freeapi.miniprojectideas.com/api/User';
   
   private currentUserSubject = new BehaviorSubject<string | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
@@ -40,9 +39,8 @@ export class AuthService {
       this.currentUserSubject.next(decryptedName);
     }
   }
-
   login(loginRequest: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.API_BASE_URL}/Login`, loginRequest)
+    return this.http.post<LoginResponse>(`${API_BASE_URL}/Login`, loginRequest)
       .pipe(
         tap(response => {
           if (response.result) {

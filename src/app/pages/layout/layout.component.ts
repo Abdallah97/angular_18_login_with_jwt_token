@@ -8,7 +8,6 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [RouterOutlet, AsyncPipe, NgIf, RouterLink],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css'
 })
 export class LayoutComponent {
   private authService = inject(AuthService);

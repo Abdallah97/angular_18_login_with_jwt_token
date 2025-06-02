@@ -16,7 +16,6 @@ interface DashboardState {
   standalone: true,
   imports: [AsyncPipe, NgFor, NgIf],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
   private authService = inject(AuthService);
