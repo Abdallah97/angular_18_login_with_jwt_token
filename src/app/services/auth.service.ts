@@ -53,21 +53,6 @@ export class AuthService {
       );
   }
 
-  register(loginRequest: LoginRequest): Observable<LoginResponse> {
-    return this.http
-      .post<LoginResponse>(`${API_BASE_URL}/CreateNewUser`, loginRequest)
-      .pipe(
-        tap((response) => {
-          if (response.result) {
-            const encryptedUserName = this.encryptData(loginRequest.EmailId);
-            localStorage.setItem('uName', encryptedUserName);
-            localStorage.setItem('angular18Token', response.data.token);
-            this.currentUserSubject.next(loginRequest.EmailId);
-          }
-        }),
-      );
-  }
-
   logout(): void {
     localStorage.removeItem('uName');
     localStorage.removeItem('angular18Token');
